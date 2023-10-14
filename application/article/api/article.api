@@ -22,8 +22,14 @@ type (
 	jwt: Auth
 )
 service article-api {
+	@doc (
+		summary: "上传封面图"
+	)
 	@handler UploadCoverHandler
 	post /upload/cover returns (UploadCoverResponse)
+	@doc (
+		summary: "发布文章"
+	)
 	@handler PublishHandler
 	post /publish (PublishRequest) returns (PublishResponse)
 }

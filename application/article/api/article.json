@@ -1,0 +1,127 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/article/publish": {
+      "post": {
+        "summary": "发布文章",
+        "operationId": "PublishHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PublishResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PublishRequest"
+            }
+          }
+        ],
+        "tags": [
+          "article-api"
+        ]
+      }
+    },
+    "/v1/article/upload/cover": {
+      "post": {
+        "summary": "上传封面图",
+        "operationId": "UploadCoverHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UploadCoverResponse"
+            }
+          }
+        },
+        "tags": [
+          "article-api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "PublishRequest": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cover": {
+          "type": "string"
+        }
+      },
+      "title": "PublishRequest",
+      "required": [
+        "title",
+        "content",
+        "description",
+        "cover"
+      ]
+    },
+    "PublishResponse": {
+      "type": "object",
+      "properties": {
+        "article_id": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "PublishResponse",
+      "required": [
+        "article_id"
+      ]
+    },
+    "UploadCoverResponse": {
+      "type": "object",
+      "properties": {
+        "cover_url": {
+          "type": "string"
+        }
+      },
+      "title": "UploadCoverResponse",
+      "required": [
+        "cover_url"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

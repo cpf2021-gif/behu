@@ -1,0 +1,20 @@
+Name: article-api
+Host: 0.0.0.0
+Port: 9090
+Auth:
+  AccessSecret: XXXXXXXXXXXX
+  AccessExpire: 604800
+  RefreshSecret: XXXXXXXXXXXX
+  RefreshExpire: 2592000
+  RefreshAfter: 604800
+Oss:
+  Endpoint: XXXXXXXXXXXX
+  AccessKeyId: XXXXXXXXXXXX
+  AccessKeySecret: XXXXXXXXXXXX
+  BucketName: behu
+ArticleRPC:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: article.rpc
+  NonBlock: true

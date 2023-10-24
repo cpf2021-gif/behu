@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
 
 	"behu/application/article/rpc/internal/svc"
 	"behu/application/article/rpc/pb"
@@ -24,7 +25,18 @@ func NewArticleDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Art
 }
 
 func (l *ArticleDetailLogic) ArticleDetail(in *pb.ArticleDetailRequest) (*pb.ArticleDetailResponse, error) {
-	// todo: add your logic here and delete this line
+	article, err := l.svcCtx.ArticleModel.FindOne(l.ctx, in.ArticleId)
+	if err != nil {
+		if err == sqlx.ErrNotFound {
+			return &pb.ArticleDetailResponse{}, nil
+		}
+		return nil, err
+	}
 
-	return &pb.ArticleDetailResponse{}, nil
+	return &pb.ArticleDetailResponse{
+		Article: &pb.ArticleItem{
+			Id:    article.Id,
+			Title: article.Title,
+		},
+	}, nil
 }

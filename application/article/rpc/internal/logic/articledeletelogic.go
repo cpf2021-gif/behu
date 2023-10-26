@@ -46,6 +46,7 @@ func (l *ArticleDeleteLogic) ArticleDelete(in *pb.ArticleDeleteRequest) (*pb.Art
 		l.Logger.Errorf("UpdateArticleStatus req: %v error: %v", in, err)
 		return nil, err
 	}
+	// 从对应的zset中删除该文章
 	_, err = l.svcCtx.BizRedis.ZremCtx(l.ctx, articlesKey(in.UserId, types.SortPublishTime), in.ArticleId)
 	if err != nil {
 		l.Logger.Errorf("ZremCtx req: %v error: %v", in, err)

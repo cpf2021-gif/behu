@@ -5,6 +5,7 @@ import (
 	"behu/application/article/rpc/internal/model"
 	"behu/application/article/rpc/internal/types"
 	"context"
+	"strconv"
 	"time"
 
 	"behu/application/article/rpc/internal/svc"
@@ -57,6 +58,29 @@ func (l *PublishLogic) Publish(in *pb.PublishRequest) (*pb.PublishResponse, erro
 	if err != nil {
 		l.Logger.Errorf("LastInsertId error: %v", err)
 		return nil, err
+	}
+
+	// 写缓存
+	var (
+		articleIdStr   = strconv.FormatInt(articleId, 10)
+		publishTimeKey = articlesKey(in.UserId, types.SortPublishTime)
+		likeNumKey     = articlesKey(in.UserId, types.SortLikeCount)
+	)
+
+	// 如果对应的zset存在, 那么就更新
+	b, _ := l.svcCtx.BizRedis.ExistsCtx(l.ctx, publishTimeKey)
+	if b {
+		_, err = l.svcCtx.BizRedis.ZaddCtx(l.ctx, publishTimeKey, time.Now().Unix(), articleIdStr)
+		if err != nil {
+			logx.Errorf("ZaddCtx error: %v", err)
+		}
+	}
+	b, _ = l.svcCtx.BizRedis.ExistsCtx(l.ctx, likeNumKey)
+	if b {
+		_, err = l.svcCtx.BizRedis.ZaddCtx(l.ctx, likeNumKey, 0, articleIdStr)
+		if err != nil {
+			logx.Errorf("ZaddCtx error: %v", err)
+		}
 	}
 
 	return &pb.PublishResponse{ArticleId: articleId}, nil

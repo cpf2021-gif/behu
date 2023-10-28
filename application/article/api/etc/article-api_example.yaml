@@ -1,6 +1,6 @@
 Name: article-api
 Host: 0.0.0.0
-Port: 9090
+Port: 9095
 Auth:
   AccessSecret: XXXXXXXXXXXX
   AccessExpire: 604800
